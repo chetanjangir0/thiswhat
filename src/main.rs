@@ -1,11 +1,19 @@
-use std::{env, process};
-use thiswhat::Config;
+use clap::Parser;
+use std::path::PathBuf;
+use thiswhat::search;
+
+
+/// Simple program to summerize a project
+#[derive(Parser, Debug)]
+#[command(version, about, long_about = None)]
+struct Args {
+    /// path of the project
+    path: PathBuf,
+
+}
 
 fn main() {
-    let config = Config::new(env::args()).unwrap_or_else(|e| {
-        eprintln!("problem parsing arguments: {}", e);
-        process::exit(1);
-    });
+    let args = Args::parse();
+    search(&args.path);
 
-    println!("{:?}", config.path)
 }
