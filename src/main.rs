@@ -1,7 +1,6 @@
 use clap::Parser;
 use std::path::PathBuf;
-use thiswhat::search;
-
+mod utils;
 
 /// Simple program to summerize a project
 #[derive(Parser, Debug)]
@@ -9,11 +8,9 @@ use thiswhat::search;
 struct Args {
     /// path of the project
     path: PathBuf,
-
 }
 
 fn main() {
     let args = Args::parse();
-    search(&args.path);
-
+    utils::scan(&args.path);
 }

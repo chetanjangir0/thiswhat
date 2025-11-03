@@ -1,14 +1,16 @@
 use std::path::PathBuf;
 use walkdir::{DirEntry, WalkDir};
 
-pub fn search(path: &PathBuf) {
+pub fn scan(path: &PathBuf) {
     for entry in WalkDir::new(path)
         .into_iter()
         .filter_entry(|e| !is_hidden(e))
         .filter_map(Result::ok)
     {
-        let entry = entry.path();
-        println!("{}", entry.display())
+        let path = entry.path();
+        if let Some("html") = path.extension().and_then(|s| s.to_str()) {
+            println!("html detected")
+        }
     }
 }
 
