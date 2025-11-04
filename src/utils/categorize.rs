@@ -1,4 +1,6 @@
-struct Category {
+use std::path::Path;
+
+pub struct Category {
     package_json: PackageJson,
 }
 
@@ -13,11 +15,16 @@ struct PackageJson {
 struct Summary {
     project_type: String,
     languages: String,
-    main_entry: String, 
+    main_entry: String,
     database: String,
-    dockerfile: bool, 
+    dockerfile: bool,
 }
 
-pub fn get_summary() {
+pub fn get_summary() {}
 
-} 
+pub fn categorize(path: &Path, cat: &mut Category) {
+    if path.ends_with("package.json"){
+        cat.package_json.exist = true
+    }
+}
+
