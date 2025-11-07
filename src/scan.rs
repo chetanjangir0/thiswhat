@@ -1,3 +1,4 @@
+use crate::categorize::{Category, categorize, get_summary};
 use std::path::PathBuf;
 use walkdir::{DirEntry, WalkDir};
 
@@ -8,9 +9,9 @@ pub fn scan(path: &PathBuf) {
         .filter_map(Result::ok)
     {
         let path = entry.path();
-        if let Some("html") = path.extension().and_then(|s| s.to_str()) {
-            println!("html detected")
-        }
+        let mut cat = Category::new();
+        categorize(path, &mut cat);
+        get_summary(&cat);
     }
 }
 

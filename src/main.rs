@@ -1,6 +1,8 @@
 use clap::Parser;
 use std::path::PathBuf;
-mod utils;
+mod scan;
+mod categorize;
+mod grep;
 
 /// Simple program to summerize a project
 #[derive(Parser, Debug)]
@@ -12,5 +14,5 @@ struct Args {
 
 fn main() {
     let args = Args::parse();
-    utils::scan(&args.path);
+    scan::scan(&args.path);
 }

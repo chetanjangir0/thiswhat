@@ -1,7 +1,7 @@
 use std::{error::Error, fs::read_to_string, path::Path};
 use regex::Regex;
 
-fn grep_regex_in_file(path: &Path, pattern: &str) -> Result<bool,Box<dyn Error>>  {
+pub fn grep_regex_in_file(path: &Path, pattern: &str) -> Result<bool,Box<dyn Error>>  {
     let re = Regex::new(pattern)?;
     let content = read_to_string(path)?;
 
