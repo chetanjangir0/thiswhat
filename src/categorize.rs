@@ -1,29 +1,23 @@
 use std::path::Path;
 
+use crate::grep::grep_regex_in_file;
+
 pub struct Category {
-    package_json: PackageJson,
+    package_json: Option<PackageJson>,
 }
 impl Category {
     pub fn new() -> Self {
-        let package_json = PackageJson {
-            exist: false,
-            node: false,
-            express: false,
-            react: false,
-            svelte: false,
-        };
         return Self {
-            package_json: package_json,
+            package_json: None,
         };
     }
 }
 
-struct PackageJson {
-    exist: bool,
-    node: bool,
-    express: bool,
-    react: bool,
-    svelte: bool,
+enum PackageJson {
+    Node,
+    Express,
+    React,
+    Svelte,
 }
 
 struct Summary {
@@ -35,23 +29,26 @@ struct Summary {
 }
 
 pub fn get_summary(cat: &Category) {
-    if cat.package_json.exist{
-        println!("package.json file detected")
-    }
-    if cat.package_json.svelte {
-        println!("svelte file detected")
+    match cat.package_json {
+        Some(PackageJson::Node) => println!("node project detected"),
+        Some(PackageJson::Express) => println!("express project detected"),
+        Some(PackageJson::React) => println!("react project detected"),
+        Some(PackageJson::Svelte) => println!("svelte project detected"),
+        _ => println!("package.json file detected"),
     }
 }
 
 pub fn categorize(path: &Path, cat: &mut Category) {
     if path.ends_with("package.json") {
-        cat.package_json.exist = true
+        if let Ok(true) = grep_regex_in_file(path, r#""main"\s*:\s*"[\w\-./]+\.js"\s*,"#) {
+            cat.package_json = Some(PackageJson::Node);
+        }
     }
 
     if let Some(extension) = path.extension() {
         match extension.to_string_lossy().as_ref() {
-            "svelte" => cat.package_json.svelte = true,
-            _ => {},
+            "svelte" => cat.package_json = Some(PackageJson::Svelte),
+            _ => {}
         }
     }
 }
